@@ -1,6 +1,6 @@
 from django.contrib import admin
 
 # Register your models here.
-from weatherproject.stats.models import HistoricalRecords
+from .models import HistoricalRecord
 
-admin.site.register(HistoricalRecords)
+admin.site.register(HistoricalRecord)
