@@ -11,7 +11,6 @@ from decimal import Decimal
 from multiprocessing import cpu_count, Pool
 from os.path import isfile, join
 
-
 from stats.models import HistoricalRecord
 
 logger = logging.getLogger('django')
@@ -103,13 +102,16 @@ def run():
     data_dir = os.environ.get('DATA_DIR')
     logger.info(f'Reading {data_dir} Directory')
 
-    files = [os.path.join(data_dir,f) for f in os.listdir(data_dir) if isfile(join(data_dir, f))]
+    files = [os.path.join(data_dir, f) for f in os.listdir(data_dir) if isfile(join(data_dir, f))]
     logger.info(f'Found {len(files)} Files')
 
     logger.info(f'Using {cpu_count()} processes in parallel')
     pool = Pool(cpu_count())
     inserted_records_count = sum(pool.map(process_file, files))
 
-    logger.info(f'{inserted_records_count} records inserted in {time.time() - start_time} seconds')
+    if inserted_records_count > 0:
+        logger.info(f'{inserted_records_count} records inserted in {time.time() - start_time} seconds')
+    else:
+        logger.info(f'{inserted_records_count} records inserted')
 
     logger.info('Loading Records Finished')
