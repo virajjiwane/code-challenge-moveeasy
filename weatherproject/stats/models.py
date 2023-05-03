@@ -1,5 +1,6 @@
 from django.db import models
 
+
 # Create your models here.
 
 
@@ -8,9 +9,9 @@ class HistoricalRecord(models.Model):
     recorded_on = models.DateField()
     # Since data is in tenths, having decimal places to 1 and assuming max temperature wont reach 100,
     # keeping max_digits as 3
-    max_temperature = models.DecimalField(decimal_places=1, max_digits=3)
-    min_temperature = models.DecimalField(decimal_places=1, max_digits=3)
-    precipitation = models.DecimalField(decimal_places=1, max_digits=4)
+    max_temperature = models.DecimalField(decimal_places=1, max_digits=3, null=True)
+    min_temperature = models.DecimalField(decimal_places=1, max_digits=3, null=True)
+    precipitation = models.DecimalField(decimal_places=1, max_digits=4, null=True)
 
     class Meta:
         unique_together = ('station_code', 'recorded_on')

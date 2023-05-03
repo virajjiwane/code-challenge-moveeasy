@@ -15,7 +15,6 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
@@ -26,7 +25,6 @@ SECRET_KEY = 'django-insecure-x4^cxgugpd^&ra-8#**o%qrzyj0s_s#v#cslrl4_256dcmxflu
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -73,7 +71,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'weatherproject.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
@@ -81,9 +78,11 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+        'OPTIONS': {
+            'timeout': 500,
+        }
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -103,7 +102,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
@@ -114,7 +112,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
@@ -129,20 +126,20 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
-"formatters": {
+    "formatters": {
         "verbose": {
             "format": "{levelname} {asctime} {module} || {message}",
             "style": "{",
         },
-},
+    },
     "handlers": {
         "console": {
-            "class": "logging.StreamHandler","formatter": "verbose",
+            "class": "logging.StreamHandler", "formatter": "verbose",
         },
         "file": {
             "level": "INFO",
-            "class": "logging.FileHandler","formatter": "verbose",
-            "filename":  BASE_DIR / "platform.log",
+            "class": "logging.FileHandler", "formatter": "verbose",
+            "filename": BASE_DIR / "platform.log",
         },
     },
     "loggers": {
@@ -152,5 +149,3 @@ LOGGING = {
         },
     }
 }
-
-
