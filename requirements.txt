@@ -1,1 +1,4 @@
 Django
+django-extensions
+pandas
+plotly
