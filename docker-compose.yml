@@ -3,7 +3,7 @@ services:
   weather-project:
     container_name: weather-project
     build: .
-    command: bash -c "python weatherproject/manage.py runscript load_historical_records && python weatherproject/manage.py runserver 0.0.0.0:8000"
+    command: bash -c "python weatherproject/manage.py runscript load_historical_records && python weatherproject/manage.py runscript generate_statistics && python weatherproject/manage.py runserver 0.0.0.0:8000"
     ports:
       - "8000:8000"
     environment:
