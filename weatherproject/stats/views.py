@@ -1,30 +1,19 @@
 # Create your views here.
 import logging
-import traceback
-from collections import OrderedDict
 
-import coreschema
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import generics, permissions
-from rest_framework.pagination import LimitOffsetPagination
-from rest_framework.response import Response
-from rest_framework.views import APIView
 
 from .models import HistoricalRecord, Statistic
 from .serializers import HistoricalRecordSerializer, StatisticSerializer
-from drf_yasg import openapi
-from drf_yasg.utils import swagger_auto_schema
 
 logger = logging.getLogger('django')
 
-
-
-from rest_framework.filters import BaseFilterBackend
-import coreapi
-from drf_yasg.inspectors import PaginatorInspector
 from drf_yasg import openapi
 
-year_param = openapi.Parameter('year', openapi.IN_QUERY, description="Year", type=openapi.TYPE_INTEGER,)
-station_code_param = openapi.Parameter('station_code', openapi.IN_QUERY, description="Station Code", type=openapi.TYPE_STRING,)
+year_param = openapi.Parameter('year', openapi.IN_QUERY, description="Year", type=openapi.TYPE_INTEGER, )
+station_code_param = openapi.Parameter('station_code', openapi.IN_QUERY, description="Station Code",
+                                       type=openapi.TYPE_STRING, )
 
 
 class HistoricalRecordView(generics.ListAPIView):
