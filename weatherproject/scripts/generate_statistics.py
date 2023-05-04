@@ -1,14 +1,13 @@
 """
 This module contains functions to calculate statistics over the DB and populate the statistic DB.
 """
-import operator
+import logging
 import traceback
-from functools import reduce
 from multiprocessing import cpu_count, Pool
 
 from django.db.models import F, Avg, Q, Sum, Count
 from stats.models import HistoricalRecord, Statistic
-import logging
+
 logger = logging.getLogger('django')
 
 
@@ -21,12 +20,12 @@ def generate_stats(station_code):
 
     inserted_record_count = 0
     try:
-        years = Statistic.objects\
-            .filter(station_code=station_code)\
-            .values('year')\
-            .annotate(Count('year'))\
+        years = Statistic.objects \
+            .filter(station_code=station_code) \
+            .values('year') \
+            .annotate(Count('year')) \
             .values_list('year', flat=True)
-        statistics = HistoricalRecord.objects\
+        statistics = HistoricalRecord.objects \
             .filter(station_code=station_code) \
             .annotate(year=F('recorded_on__year')) \
             .values('year', 'station_code') \
@@ -51,7 +50,8 @@ def run():
     It also tackles duplicate values or program-reruns.
     """
     logger.info("Generating statistics")
-    stations = HistoricalRecord.objects.values('station_code').annotate(Count('station_code')).values_list('station_code', flat=True)
+    stations = HistoricalRecord.objects.values('station_code').annotate(Count('station_code')).values_list(
+        'station_code', flat=True)
     logger.info(f'Using {cpu_count()} processes in parallel')
     pool = Pool(cpu_count())
     inserted_records_count = sum(pool.map(generate_stats, stations))

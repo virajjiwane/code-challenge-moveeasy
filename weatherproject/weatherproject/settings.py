@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'stats',
 
     'django_extensions',
+    'rest_framework',
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
@@ -148,4 +150,9 @@ LOGGING = {
             "level": "INFO",
         },
     }
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'stats.pagination.CustomPagination',
+    'PAGE_SIZE': 100,
 }

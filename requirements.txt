@@ -1,3 +1,7 @@
 Django
 django-extensions
 pandas
+djangorestframework
+drf-yasg
+coreapi
+pyyaml
