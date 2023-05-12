@@ -62,27 +62,28 @@ def process_file(file_path) -> int:
                              .filter(station_code=station_code) \
                              .values_list('recorded_on', flat=True))
 
-        record_list = []
+        # record_list = []
         with open(file_path) as txt_file:
-            for line in txt_file:
-                recorded_on, max_temperature, min_temperature, precipitation = line.split()
-                # Checking for duplicates
-                if recorded_on in existing_dates:
-                    continue
-                max_temperature, min_temperature, precipitation, recorded_on = \
-                    clean(max_temperature, min_temperature, precipitation, recorded_on)
+            content_lines = txt_file.readlines()
+        for line in content_lines:
+            recorded_on, max_temperature, min_temperature, precipitation = line.split()
+            # Checking for duplicates
+            if recorded_on in existing_dates:
+                continue
+            max_temperature, min_temperature, precipitation, recorded_on = \
+                clean(max_temperature, min_temperature, precipitation, recorded_on)
 
-                record_list.append(HistoricalRecord(
-                    station_code=station_code,
-                    recorded_on=recorded_on,
-                    max_temperature=max_temperature,
-                    min_temperature=min_temperature,
-                    precipitation=precipitation
-                ))
-                inserted_record_count += 1
+            HistoricalRecord(
+                station_code=station_code,
+                recorded_on=recorded_on,
+                max_temperature=max_temperature,
+                min_temperature=min_temperature,
+                precipitation=precipitation
+            ).save()
+            inserted_record_count += 1
 
-        if record_list:
-            HistoricalRecord.objects.bulk_create(record_list)
+        # if record_list:
+        #     HistoricalRecord.objects.bulk_create(record_list)
 
     except:
         logger.error(f"Error processing {file_path}")
@@ -107,9 +108,10 @@ def run():
     files = [os.path.join(data_dir, f) for f in os.listdir(data_dir) if isfile(join(data_dir, f))]
     logger.info(f'Found {len(files)} Files')
 
-    logger.info(f'Using {cpu_count()} processes in parallel')
-    pool = Pool(cpu_count())
-    inserted_records_count = sum(pool.map(process_file, files))
+    inserted_records_count = 0
+    for i, file in enumerate(files):
+        inserted_records_count += process_file(file)
+        # logger.info(f'Processed {i + 1} of {len(files)}')
 
     if inserted_records_count > 0:
         logger.info(f'{inserted_records_count} records inserted in {time.time() - start_time} seconds')
